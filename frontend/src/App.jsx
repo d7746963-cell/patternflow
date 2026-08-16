@@ -15,7 +15,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import ProProtectedRoute from './components/ProProtectedRoute';
 import { LayoutDashboard, Star, Bell } from 'lucide-react';
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, RedirectToSignUp } from '@clerk/clerk-react';
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
               <DashboardLayout />
             </SignedIn>
             <SignedOut>
-              <RedirectToSignIn fallbackRedirectUrl="/upload" />
+              <RedirectToSignUp fallbackRedirectUrl="/upload" />
             </SignedOut>
           </>
         }>

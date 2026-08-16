@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, RedirectToSignUp } from '@clerk/clerk-react';
 import { ArrowRight, ArrowLeft, Activity, TrendingUp, TrendingDown, Target, Check, Sparkles, BookOpen, Clock, Crosshair, BarChart2, Coins, Globe, Users, Search, Smartphone, MoreHorizontal, Shield, UploadCloud, Sliders, Compass, Zap, Rocket, CheckCircle2, GraduationCap, BarChart3, Megaphone } from 'lucide-react';
 
 function OnboardingContent() {
@@ -292,7 +292,7 @@ export default function OnboardingPage() {
         <OnboardingContent />
       </SignedIn>
       <SignedOut>
-        <RedirectToSignIn fallbackRedirectUrl="/onboarding" />
+        <RedirectToSignUp fallbackRedirectUrl="/onboarding" />
       </SignedOut>
     </>
   );
