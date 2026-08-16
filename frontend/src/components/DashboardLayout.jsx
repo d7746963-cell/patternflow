@@ -54,14 +54,14 @@ export default function DashboardLayout() {
     const active = isActive(item.path);
     const classes = `flex items-center gap-3 px-6 py-3 font-medium transition-colors ${
       active 
-        ? 'text-[#00d060] bg-[#00d060]/10 border-l-4 border-[#00d060]' 
+        ? 'text-white bg-[#00d060]/10 border-l-4 border-[#00d060]' 
         : 'text-[#888888] hover:text-white hover:bg-[#111111] border-l-4 border-transparent'
     } ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
 
     if (item.disabled) {
       return (
         <div key={item.name} className={classes}>
-          <item.icon size={20} className={active ? 'text-[#00d060]' : 'text-[#888888]'} />
+          <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
           {item.name}
         </div>
       );
@@ -70,7 +70,7 @@ export default function DashboardLayout() {
     if (item.proOnly && !isProUser && !isLoadingPro) {
       return (
         <div key={item.name} onClick={() => setShowUpgradeModal(true)} className={`${classes} cursor-pointer`}>
-          <item.icon size={20} className={active ? 'text-[#00d060]' : 'text-[#888888]'} />
+          <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
           {item.name}
         </div>
       );
@@ -78,7 +78,7 @@ export default function DashboardLayout() {
 
     return (
       <Link key={item.name} to={item.path} className={classes}>
-        <item.icon size={20} className={active ? 'text-[#00d060]' : 'text-[#888888]'} />
+        <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
         {item.name}
       </Link>
     );
@@ -124,15 +124,15 @@ export default function DashboardLayout() {
             {/* Upgrade to Pro Card */}
             {!isProUser && !isLoadingPro && (
               <div className="px-6 pb-6">
-                  <div className="bg-[#111111] border border-[#222222] rounded-2xl p-5 relative overflow-hidden group hover:border-[#00d060]/50 transition-colors">
-                    <div className="absolute top-0 right-0 p-8 bg-[#00d060]/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-                    <div className="flex items-center gap-2 text-[#00d060] font-bold mb-2">
-                       <Crown size={18} className="fill-[#00d060]/20" />
+                  <div className="bg-[#111111] border border-[#222222] rounded-2xl p-5 relative overflow-hidden group hover:border-white/20 transition-colors">
+                    <div className="absolute top-0 right-0 p-8 bg-white/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                    <div className="flex items-center gap-2 text-white font-bold mb-2">
+                       <Crown size={18} className="fill-white/20 text-white" />
                        Upgrade to Pro
                     </div>
                     <p className="text-sm text-[#888888] mb-5 leading-relaxed">Unlock more analyses, AI insights & advanced features.</p>
-                    <Link to="/billing" className="w-full bg-[#00d060] hover:bg-[#00e56a] text-black font-bold py-2.5 px-4 rounded-xl shadow-[0_0_15px_rgba(0,208,96,0.2)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                      Upgrade Now <Sparkles size={16} />
+                    <Link to="/billing" className="w-full bg-[#00d060]/10 hover:bg-[#00d060]/20 border border-[#00d060]/30 text-[#00d060] font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer">
+                      Upgrade Now <Sparkles size={16} className="text-[#00d060]" />
                     </Link>
                   </div>
               </div>
