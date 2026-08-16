@@ -89,7 +89,7 @@ export default function UploadPage() {
       try {
         const token = await getToken();
         if (!token) return;
-        const res = await fetch('/api/subscription/status', {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/status`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -141,7 +141,7 @@ export default function UploadPage() {
     
     try {
       // We proxy it through our backend to avoid CORS issues
-      const res = await fetch('/api/fetch-image', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/fetch-image`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: linkInput })
@@ -210,7 +210,7 @@ export default function UploadPage() {
 
     try {
       const token = await getToken();
-      const res = await fetch('/api/analyze', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/analyze`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

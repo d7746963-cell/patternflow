@@ -23,7 +23,7 @@ export default function DashboardLayout() {
       try {
         const token = await getToken();
         if (!token) return;
-        const response = await fetch('/api/subscription/status', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/status`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

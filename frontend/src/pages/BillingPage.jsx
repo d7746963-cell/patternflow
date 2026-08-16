@@ -21,7 +21,7 @@ export default function BillingPage() {
           setCheckingStatus(false);
           return;
         }
-        const res = await fetch('/api/subscription/status', {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/status`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();

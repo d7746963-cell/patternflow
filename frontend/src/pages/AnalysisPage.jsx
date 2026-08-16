@@ -59,7 +59,7 @@ export default function AnalysisPage() {
       setIsLoadingNews(true);
       try {
         const token = await getToken();
-        const res = await fetch('/api/news', {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/news`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default function AnalysisPage() {
 
       const token = await getToken();
 
-      const res = await fetch('/api/chat', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
