@@ -14,8 +14,10 @@ router.get('/status', async (req, res) => {
 
     try {
       const user = await clerkClient.users.getUser(userId);
-      const email = user.emailAddresses[0]?.emailAddress;
+      const email = user.emailAddresses[0]?.emailAddress?.toLowerCase();
+      console.log(`[Bypass Check] Checking email: ${email}`);
       if (email === 'd7746963@gmail.com') {
+        console.log(`[Bypass Check] Admin granted to ${email}`);
         return res.json({ isPro: true, plan: "Pro (Admin)" });
       }
     } catch (err) {
