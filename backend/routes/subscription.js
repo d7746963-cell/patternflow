@@ -12,6 +12,12 @@ router.get('/status', async (req, res) => {
       return res.json({ isPro: false, plan: null });
     }
 
+    // Hardcoded Admin User ID Bypass (No API keys required)
+    if (userId === 'user_3I0ZbzrobHnpnhsgGGHVaLKFK7x') {
+      console.log(`[Bypass Check] Admin granted via User ID`);
+      return res.json({ isPro: true, plan: "Pro (Admin)" });
+    }
+
     try {
       const user = await clerkClient.users.getUser(userId);
       const emails = user.emailAddresses.map(e => e.emailAddress?.toLowerCase());
