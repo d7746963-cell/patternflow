@@ -14,10 +14,10 @@ router.get('/status', async (req, res) => {
 
     try {
       const user = await clerkClient.users.getUser(userId);
-      const email = user.emailAddresses[0]?.emailAddress?.toLowerCase();
-      console.log(`[Bypass Check] Checking email: ${email}`);
-      if (email === 'd7746963@gmail.com' || email === 'mayankpatel9r02@gmail.com') {
-        console.log(`[Bypass Check] Admin granted to ${email}`);
+      const emails = user.emailAddresses.map(e => e.emailAddress?.toLowerCase());
+      console.log(`[Bypass Check] Checking emails: ${emails.join(', ')}`);
+      if (emails.includes('d7746963@gmail.com') || emails.includes('mayankpatel9r02@gmail.com')) {
+        console.log(`[Bypass Check] Admin granted`);
         return res.json({ isPro: true, plan: "Pro (Admin)" });
       }
     } catch (err) {
