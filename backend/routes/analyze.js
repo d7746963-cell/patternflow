@@ -263,62 +263,47 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     const { asset_type, timeframe, ticker, trading_style, explanation_level, analysis_length } = req.body;
     
-    // --- KELVIQ ENTITLEMENT CHECK ---
-    // If the user requests 'detail' analysis, we consider that a Pro feature
+    // --- PRO ENTITLEMENT CHECK ---
     if (analysis_length === 'detail') {
       const userId = req.auth?.userId;
       if (!userId) {
-        return res.status(401).json({ error: 'Authentication required. Please sign in to access detailed Pro analysis.' });
+        return res.status(401).json({ error: 'Authentication required.' });
       }
 
-      // Hardcoded admin bypass — no Clerk/Kelviq API call needed
-      const ADMIN_USER_IDS = [
-        'user_3I0ZbzrobHnpnhsgGGHVaLKFK7x', // mayankpatel9r02@gmail.com
-      ];
-      if (ADMIN_USER_IDS.includes(userId)) {
-        console.log(`[Analyze] Admin bypass granted for userId: ${userId}`);
-        // Skip all payment checks, fall through to analysis
-      } else {
-      try {
-        const user = await clerkClient.users.getUser(userId);
-        const email = user.emailAddresses[0]?.emailAddress?.toLowerCase();
-        
+      // Hardcoded admin IDs — instant bypass, no external API calls
+      const ADMIN_IDS = ['user_3I0ZbzrobHnpnhsgGGHVaLKFK7x'];
+      const isAdmin = ADMIN_IDS.includes(userId);
+
+      if (!isAdmin) {
+        // Non-admin: check payment via Kelviq
         let hasAccess = false;
-        
-        if (email === 'd7746963@gmail.com') {
-          hasAccess = true;
-        } else {
-          const client = new Kelviq({ 
-            accessToken: process.env.KELVIQ_SERVER_API_KEY,
-            environment: 'production'
-          });
-          
-          // Using the actual Feature ID from the Kelviq dashboard
-          const ent = await client.entitlements.getEntitlement({
-            customerId: userId,
-            featureId: "7days", 
-          });
-          
-          if (ent && ent.hasAccess) {
+        try {
+          const user = await clerkClient.users.getUser(userId);
+          const email = user.emailAddresses[0]?.emailAddress?.toLowerCase();
+          if (email === 'd7746963@gmail.com') {
             hasAccess = true;
           } else {
-            // Fallback: Check if they have an active subscription for this specific product
-            const productId = '8a50795c-c8b9-43e5-8f2c-dd77e7052efc';
-            const subs = await client.subscriptions.list({ customerId: userId });
-            hasAccess = subs && subs.results && subs.results.some(s => 
-              s.status === 'active' && s.product?.id === productId
-            );
+            const client = new Kelviq({
+              accessToken: process.env.KELVIQ_SERVER_API_KEY,
+              environment: 'production'
+            });
+            const ent = await client.entitlements.getEntitlement({ customerId: userId, featureId: '7days' });
+            if (ent && ent.hasAccess) {
+              hasAccess = true;
+            } else {
+              const productId = '8a50795c-c8b9-43e5-8f2c-dd77e7052efc';
+              const subs = await client.subscriptions.list({ customerId: userId });
+              hasAccess = subs && subs.results && subs.results.some(s => s.status === 'active' && s.product?.id === productId);
+            }
           }
+        } catch (err) {
+          console.warn(`[Kelviq] Entitlement check warning: ${err.message}`);
+          return res.status(403).json({ error: 'Could not verify Pro subscription. Please try again.' });
         }
-
         if (!hasAccess) {
           return res.status(403).json({ error: 'Pro upgrade required. You need an active subscription to generate detailed reports.' });
         }
-      } catch (err) {
-        console.warn(`[Kelviq] Entitlement check warning: ${err.message}`);
-        return res.status(403).json({ error: 'Could not verify Pro subscription. Please try again or contact support.' });
       }
-      } // end of else (non-admin users)
     }
     // --------------------------------
     
