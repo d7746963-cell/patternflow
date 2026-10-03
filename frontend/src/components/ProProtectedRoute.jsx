@@ -3,13 +3,24 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import { Loader2 } from 'lucide-react';
 
+// Hardcoded admin user IDs — instant free lifetime access, no backend call needed
+const ADMIN_USER_IDS = [
+  'user_3I0ZbzrobHnpnhsgGGHVaLKFK7x', // mayankpatel9r02@gmail.com
+];
+
 export default function ProProtectedRoute({ children }) {
-  const { getToken, isLoaded, isSignedIn } = useAuth();
+  const { getToken, isLoaded, isSignedIn, userId } = useAuth();
   const [isPro, setIsPro] = useState(null);
 
   useEffect(() => {
     const checkSubscription = async () => {
       if (!isLoaded || !isSignedIn) return;
+
+      // Frontend admin bypass — no backend call needed
+      if (ADMIN_USER_IDS.includes(userId)) {
+        setIsPro(true);
+        return;
+      }
       
       try {
         const token = await getToken();
@@ -25,12 +36,12 @@ export default function ProProtectedRoute({ children }) {
         setIsPro(data.isPro);
       } catch (err) {
         console.error('Error checking Pro status:', err);
-        setIsPro(false); // Fail closed to prevent unauthorized access
+        setIsPro(false);
       }
     };
 
     checkSubscription();
-  }, [isLoaded, isSignedIn, getToken]);
+  }, [isLoaded, isSignedIn, getToken, userId]);
 
   if (!isLoaded) {
     return (
