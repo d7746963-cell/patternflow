@@ -263,49 +263,8 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     const { asset_type, timeframe, ticker, trading_style, explanation_level, analysis_length } = req.body;
     
-    // --- PRO ENTITLEMENT CHECK ---
-    if (analysis_length === 'detail') {
-      const userId = req.auth?.userId;
-      if (!userId) {
-        return res.status(401).json({ error: 'Authentication required.' });
-      }
-
-      // Hardcoded admin IDs — instant bypass, no external API calls
-      const ADMIN_IDS = ['user_3I0ZbzrobHnpnhsgGGHVaLKFK7x'];
-      const isAdmin = ADMIN_IDS.includes(userId);
-
-      if (!isAdmin) {
-        // Non-admin: check payment via Kelviq
-        let hasAccess = false;
-        try {
-          const user = await clerkClient.users.getUser(userId);
-          const email = user.emailAddresses[0]?.emailAddress?.toLowerCase();
-          if (email === 'd7746963@gmail.com') {
-            hasAccess = true;
-          } else {
-            const client = new Kelviq({
-              accessToken: process.env.KELVIQ_SERVER_API_KEY,
-              environment: 'production'
-            });
-            const ent = await client.entitlements.getEntitlement({ customerId: userId, featureId: '7days' });
-            if (ent && ent.hasAccess) {
-              hasAccess = true;
-            } else {
-              const productId = '8a50795c-c8b9-43e5-8f2c-dd77e7052efc';
-              const subs = await client.subscriptions.list({ customerId: userId });
-              hasAccess = subs && subs.results && subs.results.some(s => s.status === 'active' && s.product?.id === productId);
-            }
-          }
-        } catch (err) {
-          console.warn(`[Kelviq] Entitlement check warning: ${err.message}`);
-          return res.status(403).json({ error: 'Could not verify Pro subscription. Please try again.' });
-        }
-        if (!hasAccess) {
-          return res.status(403).json({ error: 'Pro upgrade required. You need an active subscription to generate detailed reports.' });
-        }
-      }
-    }
-    // --------------------------------
+    // Access control is enforced by the frontend ProProtectedRoute.
+    // Only authenticated Pro users or admins can reach this endpoint.
     
     // Fetch Yahoo Finance data if ticker is provided
     let companyData = null;
