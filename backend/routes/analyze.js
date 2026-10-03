@@ -270,7 +270,15 @@ router.post('/', upload.single('image'), async (req, res) => {
       if (!userId) {
         return res.status(401).json({ error: 'Authentication required. Please sign in to access detailed Pro analysis.' });
       }
-      
+
+      // Hardcoded admin bypass — no Clerk/Kelviq API call needed
+      const ADMIN_USER_IDS = [
+        'user_3I0ZbzrobHnpnhsgGGHVaLKFK7x', // mayankpatel9r02@gmail.com
+      ];
+      if (ADMIN_USER_IDS.includes(userId)) {
+        console.log(`[Analyze] Admin bypass granted for userId: ${userId}`);
+        // Skip all payment checks, fall through to analysis
+      } else {
       try {
         const user = await clerkClient.users.getUser(userId);
         const email = user.emailAddresses[0]?.emailAddress?.toLowerCase();
@@ -310,6 +318,7 @@ router.post('/', upload.single('image'), async (req, res) => {
         console.warn(`[Kelviq] Entitlement check warning: ${err.message}`);
         return res.status(403).json({ error: 'Could not verify Pro subscription. Please try again or contact support.' });
       }
+      } // end of else (non-admin users)
     }
     // --------------------------------
     
