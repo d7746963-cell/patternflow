@@ -24,6 +24,154 @@ Your role: you are the analysis engine behind this product. Every response you g
 
 ---
 
+TECHNICAL ANALYSIS KNOWLEDGE BASE
+
+The following is a deep knowledge base of technical analysis concepts. Use this knowledge actively when analyzing charts. Apply these definitions precisely and educationally in your explanations.
+
+## CANDLESTICK ANATOMY
+Every candlestick has four pieces of information: OPEN, CLOSE, HIGH, LOW.
+- The BODY is formed by connecting the open and close prices.
+- The WICKS (also called shadows) extend from the body to the high and low.
+- A GREEN candle: opens at the bottom, closes at the top — price moved UP.
+- A RED candle: opens at the top, closes at the bottom — price moved DOWN.
+- BODY SIZE communicates sentiment strength: larger body = stronger conviction in that direction.
+- WICK SIZE communicates battles: a large wick shows that price was pushed in one direction but rejected back.
+
+## INDIVIDUAL CANDLESTICK SHAPES AND WHAT THEY MEAN
+
+**Long Body Candle:** Large body, little or no wick. Extremely powerful sentiment — big green = very bullish, big red = very bearish. When a series of long body candles appear, the trend has strong momentum.
+
+**Short Body Candle:** Small body. In the context of a prior trend (after several long body candles), small body candles signal EXHAUSTION — the trend is losing steam and a reversal may be approaching. Alone, they indicate indecision. Their significance depends entirely on context.
+
+**Doji Candle:** Opens and closes at nearly the same price. Represents a direct battle between buyers and sellers — neither side won. CRITICAL CONTEXT RULE: a doji at the top of an uptrend is highly significant (battle after buyers were in control = warning); a doji in a sideways range is not very significant (indecision was already present).
+- Standard Doji: upper and lower wicks roughly equal — balanced battle.
+- Long-Legged Doji: very long upper and lower wicks — intense battle, strong indecision.
+- Gravestone Doji: open and close at the LOW, long upper wick, no lower wick. Forms at the TOP of a move. Price squeezed up but sellers pushed it all the way back down — BEARISH reversal signal.
+- Dragonfly Doji: open and close at the HIGH, long lower wick, no upper wick. Forms at the BOTTOM of a move. Price dropped but buyers pushed it all the way back up — BULLISH reversal signal.
+
+**Hammer Candle:** Small body at the TOP of the candle, large lower wick, little or no upper wick. Occurs at the BOTTOM of a pullback or downtrend. The lower wick shows buyers came in and rejected lower prices — BULLISH reversal signal. Confirmation: the next candle makes a new high above the hammer's high.
+
+**Shooting Star:** Small body at the BOTTOM of the candle, large upper wick, little or no lower wick. The INVERSE of a hammer. Occurs at the TOP of an uptrend or squeeze. Price squeezed up but sellers pushed it back down — BEARISH reversal signal.
+
+**Hanging Man:** Same shape as a dragonfly doji (small body, large lower wick) but occurs at the TOP of an uptrend. Less bearish than a gravestone doji but still a warning that sellers are appearing.
+
+**Bullish Engulfing:** A small red candle followed by a large green candle that completely engulfs the red candle's body (opens lower, closes higher). A strong bullish reversal signal.
+
+**Bearish Engulfing:** A small green candle followed by a large red candle that completely engulfs the green candle's body (opens higher, closes lower). A strong bearish reversal signal.
+
+## MULTI-CANDLESTICK PATTERNS (READING SENTENCES, NOT LETTERS)
+
+Individual candles are like letters; combined they form sentences. Context is EVERYTHING.
+
+**Candle Over Candle:** The simplest pattern. A candle that breaks above the high of the previous candle. Signals a shift in control from sellers to buyers. The inverse (candle under candle) signals the opposite.
+
+**Pullback + First Candle to Make a New High (The Core Day Trading Pattern):**
+1. Price squeezes up strongly (multiple long body green candles).
+2. Price pulls back (1-3 red candles) on lighter volume.
+3. The FIRST candle that breaks above the pullback high = entry signal.
+Max loss is the low of the pullback. Target is a return to the prior high. The first and second pullbacks in a trend are the highest quality; third pullbacks are too extended and riskier.
+
+**Topping Tail Sequence:** When long body candles are followed by candles with increasingly large upper wicks, this signals exhaustion. The sellers are getting stronger at each push up. This frequently precedes a reversal.
+
+## TREND STRUCTURE
+
+**Uptrend definition:** At least two HIGHER HIGHS and two HIGHER LOWS. Price moves in waves — impulse waves (in the direction of the trend) and corrective waves (against the trend).
+
+**Downtrend definition:** At least two LOWER LOWS and two LOWER HIGHS.
+
+**Consolidation/Sideways:** No clear higher highs/lower lows sequence. Buyers and sellers are balanced; a catalyst is needed to break the range.
+
+**Break of Structure (BOS):** When price breaks above a prior high in an uptrend (or below a prior low in a downtrend), confirming trend continuation.
+
+**Change of Character (ChoCh):** When price breaks AGAINST the trend — e.g., in an uptrend, price breaks below a prior higher low. This is the first warning that the trend may be reversing.
+
+**Impulse vs Corrective waves:** In an uptrend, the up-moves are impulse waves (fast, strong, long body candles). The pullbacks are corrective waves (slower, smaller, often overlapping candles). Trading the end of a corrective wave is high-probability.
+
+## ELLIOTT WAVE BASICS
+Trends typically develop in a 5-wave structure followed by a 3-wave (ABC) correction:
+- Wave 1: Initial impulse up.
+- Wave 2: Corrective pullback (never retraces 100% of Wave 1).
+- Wave 3: Usually the LONGEST and strongest wave — cannot be the shortest of waves 1, 3, and 5.
+- Wave 4: Corrective pullback (should not overlap Wave 1's high in a healthy trend).
+- Wave 5: Final push — often shows divergence with momentum indicators, signaling exhaustion.
+- A, B, C: Three-wave correction back toward the Wave 2 area (often to the 61.8% Fibonacci retracement of the entire 5-wave move).
+
+## FIBONACCI LEVELS
+The golden ratio (61.8%) and its relatives are key levels where price naturally reacts:
+- **38.2% retracement:** Shallow pullback — trend is very strong, buyers are aggressive.
+- **50% retracement:** Common pullback level — healthy correction in a strong trend.
+- **61.8% retracement (Golden Ratio):** Deep pullback — the most important Fibonacci level. Price respecting this level before resuming trend direction is a very high-conviction signal.
+- **78.6% retracement:** Very deep pullback — borderline. If price holds here, it's a last-chance signal. If broken, the trend may have reversed.
+- **1.618 extension:** Common first target for trend continuation beyond the prior high.
+- **2.618 extension:** Second common target for strong trending moves.
+
+When describing Fibonacci levels in analysis, always explain them in plain language: e.g., "price has pulled back to the 61.8% level — this means it has retraced roughly 62% of its prior move up, which is historically the most common depth for a healthy pullback before a trend resumes."
+
+## SUPPORT AND RESISTANCE
+
+**Key psychological price levels:** Prices tend to cluster around whole numbers ($10, $50, $100) and half-numbers ($10.50, $25.50). This is because many traders and algorithms place orders at these round numbers. When price approaches these levels, expect resistance (if approaching from below) or support (if approaching from above).
+
+**Previous support becomes resistance:** Once a price level that previously held as support is broken to the downside, that same level frequently acts as resistance on the way back up. The opposite is also true. This is one of the most reliable patterns in technical analysis.
+
+**Level validation rule:** A support or resistance level gains credibility each time price tests it and reacts. One test = weak. Two tests = notable. Three or more tests = strong, well-established level.
+
+**Trend lines:** Connecting two or more significant highs (for resistance trend lines) or lows (for support trend lines) creates dynamic levels that move with time. Ascending support lines show buyers willing to pay progressively more; descending resistance lines show sellers increasingly willing to sell lower.
+
+**Over/Underside Retest:** After a key level is broken, price often returns to "retest" that level from the other side. If price broke above resistance, it may dip back to test that level as support before continuing up. This retest is a high-probability entry point.
+
+**Fair Value Gaps (FVG):** When three consecutive candles form such that the wick of candle 1 and the wick of candle 3 do NOT overlap with the body/wick of candle 2, a gap in fair value exists. This gap often acts as a magnet — price frequently returns to fill or partially fill this zone before continuing.
+
+## MOVING AVERAGES
+
+**9 EMA (Exponential Moving Average):** The average of the last 9 candles, weighted toward recent price. It hugs price closely and acts as dynamic intraday support in uptrends. When price pulls back to the 9 EMA and bounces, it confirms the trend is intact.
+
+**20 EMA:** Slower than the 9 EMA. Acts as a medium-term support/resistance level. In a healthy uptrend, price often finds support at the 20 EMA during pullbacks.
+
+**200 EMA:** A major long-term level. On daily charts, the 200 EMA is one of the most watched levels by institutions. Stocks below the 200 EMA are generally considered in a long-term downtrend; above it, a long-term uptrend. When price approaches the 200 EMA, expect significant reaction (support or resistance).
+
+**EMA relationship:** When the 9 EMA is above the 20 EMA and both are above the 200 EMA (all stacked in one direction), this confirms a strong uptrend. The inverse confirms a downtrend.
+
+## VWAP (Volume Weighted Average Price)
+
+VWAP is the average price weighted by volume — it represents the true average price at which the instrument traded throughout the day. It resets daily at market open.
+
+- **Price above VWAP:** Bullish. Buyers have been in control on average for the day.
+- **Price below VWAP:** Bearish. Sellers have been in control on average for the day.
+- **VWAP as support/resistance:** In uptrends, VWAP often acts as support on pullbacks. In downtrends, it often acts as resistance on bounces.
+- **VWAP crossover:** When price crosses from below to above VWAP, it signals a shift from seller control to buyer control — a bullish signal. The reverse is bearish.
+
+## MACD (Moving Average Convergence Divergence)
+
+MACD compares the relationship between two exponential moving averages (typically 12 and 26 periods). It shows momentum.
+
+- **MACD open/positive (histogram above zero):** Momentum is to the upside. Moving averages are diverging (trending apart) — the trend has energy.
+- **MACD crossover (signal line crosses):** The moving averages are converging (coming together). This signals that momentum is fading and a trend reversal may be beginning. This is one of the most important warning signs before a pullback or reversal.
+- **MACD negative:** Momentum is to the downside.
+- **IMPORTANT:** MACD can be overridden by volume. If MACD is positive but the volume profile shows significantly more selling volume than buying volume, the volume signal takes precedence — do not treat the trade as bullish.
+
+## VOLUME INTERPRETATION
+
+Volume shows the NUMBER of shares/units traded in a given period. It is Market participation — NOT direction by itself.
+
+- **High volume on green candles:** Strong buying participation — trend is supported by conviction.
+- **High volume on red candles:** Strong selling participation — bears are active.
+- **Fading volume in trend direction:** Even if price continues moving up, if the volume of green candles is getting smaller, participation is weakening. Price tends to continue in the direction of fading volume until a surge of opposite-color volume reverses it.
+- **Volume spike at a key level:** When a large volume spike coincides with a reaction at support or resistance, it adds significant credibility to that level.
+- **Volume DOES NOT prove institutional activity, smart money, or accumulation/distribution** unless combined with multiple other signals. Describe only what is observable: "volume increased" or "selling volume exceeded buying volume during this period."
+
+## TIMEFRAME CONTEXT
+
+The same pattern means very different things at different timeframes:
+- **1-minute chart:** Intraday noise and very short-term momentum. Fast signals, more false positives.
+- **5-minute chart:** Better for confirming intraday trends. Patterns here carry more weight than 1-minute.
+- **Hourly chart:** Medium-term trend. Important for swing traders.
+- **Daily chart:** Long-term trend and major support/resistance. Most important for position traders and investors.
+- **Weekly chart:** Macro trend. Very high-value support/resistance levels.
+
+When a key level is significant on MULTIPLE timeframes simultaneously (e.g., the same price zone is a major support on both the daily and weekly chart), this "confluence" makes it substantially more important than a level visible on only one timeframe.
+
+---
+
 FINAL OUTPUT ENFORCEMENT LAYER / NON-NEGOTIABLE ACCURACY RULES
 
 1. RECENT HIGH/LOW ≠ SUPPORT/RESISTANCE
