@@ -12,12 +12,12 @@ const ADMIN_EMAILS = [
 
 export default function ProProtectedRoute({ children }) {
   const { getToken, isLoaded, isSignedIn } = useAuth();
-  const { user } = useUser();
+  const { user, isLoaded: userLoaded } = useUser();
   const [isPro, setIsPro] = useState(null);
 
   useEffect(() => {
     const checkSubscription = async () => {
-      if (!isLoaded || !isSignedIn) return;
+      if (!isLoaded || !isSignedIn || !userLoaded) return;
 
       // Frontend admin bypass — check by email, works on any Clerk instance
       const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
@@ -45,7 +45,7 @@ export default function ProProtectedRoute({ children }) {
     };
 
     checkSubscription();
-  }, [isLoaded, isSignedIn, getToken, userId]);
+  }, [isLoaded, isSignedIn, userLoaded, user, getToken]);
 
   if (!isLoaded) {
     return (
