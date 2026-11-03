@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
+import { useUser } from '@clerk/clerk-react';
 import { Loader2 } from 'lucide-react';
 
-// Hardcoded admin user IDs — instant free lifetime access, no backend call needed
-const ADMIN_USER_IDS = [
-  'user_3I0ZbzrobHnpnhsgGGHVaLKFK7x', // mayankpatel9r02@gmail.com
+// Hardcoded admin emails — free lifetime access, works across all Clerk instances
+const ADMIN_EMAILS = [
+  'mayankpatel9r02@gmail.com',
+  'd7746963@gmail.com',
 ];
 
 export default function ProProtectedRoute({ children }) {
-  const { getToken, isLoaded, isSignedIn, userId } = useAuth();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
   const [isPro, setIsPro] = useState(null);
 
   useEffect(() => {
     const checkSubscription = async () => {
       if (!isLoaded || !isSignedIn) return;
 
-      // Frontend admin bypass — no backend call needed
-      if (ADMIN_USER_IDS.includes(userId)) {
+      // Frontend admin bypass — check by email, works on any Clerk instance
+      const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+      if (userEmail && ADMIN_EMAILS.includes(userEmail)) {
         setIsPro(true);
         return;
       }
