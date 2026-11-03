@@ -19,9 +19,17 @@ export default function ProProtectedRoute({ children }) {
     const checkSubscription = async () => {
       if (!isLoaded || !isSignedIn || !userLoaded) return;
 
-      // Frontend admin bypass — check by email, works on any Clerk instance
-      const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
-      if (userEmail && ADMIN_EMAILS.includes(userEmail)) {
+      // Frontend admin bypass — check ALL email addresses on the account
+      const allEmails = (user?.emailAddresses || []).map(e => e.emailAddress?.toLowerCase());
+      const primaryEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+      console.log('[PatternFlow] Checking access for emails:', allEmails, 'primary:', primaryEmail);
+
+      const isAdmin = ADMIN_EMAILS.some(adminEmail =>
+        allEmails.includes(adminEmail) || primaryEmail === adminEmail
+      );
+
+      if (isAdmin) {
+        console.log('[PatternFlow] Admin access granted');
         setIsPro(true);
         return;
       }
