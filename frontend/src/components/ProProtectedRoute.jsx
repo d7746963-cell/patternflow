@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import { useUser } from '@clerk/clerk-react';
 import { Loader2 } from 'lucide-react';
@@ -14,6 +14,7 @@ export default function ProProtectedRoute({ children }) {
   const { getToken, isLoaded, isSignedIn } = useAuth();
   const { user, isLoaded: userLoaded } = useUser();
   const [isPro, setIsPro] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const checkSubscription = async () => {
@@ -22,14 +23,12 @@ export default function ProProtectedRoute({ children }) {
       // Frontend admin bypass — check ALL email addresses on the account
       const allEmails = (user?.emailAddresses || []).map(e => e.emailAddress?.toLowerCase());
       const primaryEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
-      console.log('[PatternFlow] Checking access for emails:', allEmails, 'primary:', primaryEmail);
 
       const isAdmin = ADMIN_EMAILS.some(adminEmail =>
         allEmails.includes(adminEmail) || primaryEmail === adminEmail
       );
 
       if (isAdmin) {
-        console.log('[PatternFlow] Admin access granted');
         setIsPro(true);
         return;
       }
@@ -76,8 +75,18 @@ export default function ProProtectedRoute({ children }) {
     );
   }
 
-  if (isPro === false) {
-    return <Navigate to="/billing" replace />;
+  // Check if free trial analysis has been used
+  const hasUsedFree = Boolean(
+    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1) ||
+    (user?.id && localStorage.getItem(`patternflow_free_used_${user.id}`) === '1')
+  );
+
+  // If user is not Pro:
+  // - If they haven't used their 1 free analysis yet: ALLOW access to /upload and /analysis
+  // - If they are currently viewing /analysis: ALLOW access to see their generated result
+  // - Otherwise, redirect to billing
+  if (isPro === false && hasUsedFree && !location.pathname.startsWith('/analysis')) {
+    return <Navigate to="/billing?reason=limit_reached" replace />;
   }
 
   return children ? children : <Outlet />;

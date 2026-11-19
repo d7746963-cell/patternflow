@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { LineChart, LayoutDashboard, History, Star, Bell, Settings, CreditCard, HelpCircle, Menu, X, Crown, Sparkles } from 'lucide-react';
-import { UserButton, useAuth } from '@clerk/clerk-react';
+import { UserButton, useAuth, useUser } from '@clerk/clerk-react';
+
+// Hardcoded admin emails — free lifetime access
+const ADMIN_EMAILS = [
+  'mayankpatel9r02@gmail.com',
+  'd7746963@gmail.com',
+];
 
 export default function DashboardLayout() {
   const location = useLocation();
@@ -17,12 +23,30 @@ export default function DashboardLayout() {
   const [isProUser, setIsProUser] = useState(false);
   const [isLoadingPro, setIsLoadingPro] = useState(true);
   const { getToken } = useAuth();
+  const { user } = useUser();
 
+  // Check admin emails & subscription status
   useEffect(() => {
     const checkProStatus = async () => {
+      // Check admin status
+      const allEmails = (user?.emailAddresses || []).map(e => e.emailAddress?.toLowerCase());
+      const primaryEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+      const isAdmin = ADMIN_EMAILS.some(adminEmail =>
+        allEmails.includes(adminEmail) || primaryEmail === adminEmail
+      );
+
+      if (isAdmin) {
+        setIsProUser(true);
+        setIsLoadingPro(false);
+        return;
+      }
+
       try {
         const token = await getToken();
-        if (!token) return;
+        if (!token) {
+          setIsLoadingPro(false);
+          return;
+        }
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/status`, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -37,9 +61,17 @@ export default function DashboardLayout() {
       }
     };
     checkProStatus();
-  }, []);
+  }, [user, getToken]);
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Check if 1 free analysis has already been used
+  const hasUsedFree = Boolean(
+    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1) ||
+    (user?.id && localStorage.getItem(`patternflow_free_used_${user.id}`) === '1')
+  );
+
+  const canAccessUpload = isProUser || !hasUsedFree;
 
   const navItems = [
     { name: 'Analyze Chart', icon: LineChart, path: '/upload', proOnly: true },
@@ -67,11 +99,13 @@ export default function DashboardLayout() {
       );
     }
 
-    if (item.proOnly && !isProUser && !isLoadingPro) {
+    // If item is proOnly and user is not Pro AND has already used their free trial
+    if (item.proOnly && !canAccessUpload && !isLoadingPro) {
       return (
         <div key={item.name} onClick={() => setShowUpgradeModal(true)} className={`${classes} cursor-pointer`}>
           <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
-          {item.name}
+          <span className="flex-1">{item.name}</span>
+          <Crown size={14} className="text-[#00d060]" />
         </div>
       );
     }
@@ -79,7 +113,12 @@ export default function DashboardLayout() {
     return (
       <Link key={item.name} to={item.path} className={classes}>
         <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
-        {item.name}
+        <span className="flex-1">{item.name}</span>
+        {!isProUser && !hasUsedFree && item.path === '/upload' && (
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00d060]/20 text-[#00d060] border border-[#00d060]/30">
+            1 Free
+          </span>
+        )}
       </Link>
     );
   };
@@ -183,7 +222,7 @@ export default function DashboardLayout() {
             
             <h2 className="text-2xl font-extrabold text-white mb-2">Upgrade to Pro</h2>
             <p className="text-[#888888] text-sm mb-6 leading-relaxed">
-              You need a Pro subscription to generate AI chart analyses. Upgrade now to unlock advanced pattern recognition and unlimited insights.
+              You've used your 1 free chart analysis. Upgrade to Pro now to unlock unlimited institutional chart breakdowns, Smart Money Concepts, and real-time AI chat.
             </p>
             
             <div className="flex gap-3">

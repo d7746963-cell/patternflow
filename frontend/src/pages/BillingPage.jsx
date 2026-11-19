@@ -99,6 +99,15 @@ export default function BillingPage() {
         </div>
       )}
 
+      {searchParams.get('reason') === 'limit_reached' && (
+        <div className="mb-8 p-4 rounded-2xl bg-[#00d060]/10 border border-[#00d060]/30 text-center max-w-xl mx-auto flex items-center justify-center gap-3">
+          <Sparkles size={20} className="text-[#00d060] flex-shrink-0" />
+          <span className="text-sm font-semibold text-white">
+            You've used your 1 free analysis! Choose a plan below to unlock unlimited institutional chart scans.
+          </span>
+        </div>
+      )}
+
       {/* If user is already Pro, show active plan */}
       {isPro ? (
         <div className="text-center mt-8 relative z-10">

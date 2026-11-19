@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { CloudUpload, X, MoreHorizontal, Sun, ChevronDown, Activity, Shield, Crosshair, Triangle, FileText, TrendingUp, TrendingDown, Minus, Sparkles, Camera, LineChart, ImagePlus } from 'lucide-react';
-import { useAuth } from '@clerk/clerk-react';
+import { CloudUpload, X, MoreHorizontal, Sun, ChevronDown, Activity, Shield, Crosshair, Triangle, FileText, TrendingUp, TrendingDown, Minus, Sparkles, Camera, LineChart, ImagePlus, AlertCircle } from 'lucide-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
+
+// Hardcoded admin emails — free lifetime access
+const ADMIN_EMAILS = [
+  'mayankpatel9r02@gmail.com',
+  'd7746963@gmail.com',
+];
 
 const CustomSelect = ({ value, onChange, options, icon, className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,9 +89,28 @@ export default function UploadPage() {
   const [isFetchingLink, setIsFetchingLink] = useState(false);
   const [isPro, setIsPro] = useState(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const { user } = useUser();
+
+  // Admin and free analysis calculations
+  const allEmails = (user?.emailAddresses || []).map(e => e.emailAddress?.toLowerCase());
+  const primaryEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+  const isAdmin = ADMIN_EMAILS.some(adminEmail =>
+    allEmails.includes(adminEmail) || primaryEmail === adminEmail
+  );
+
+  const hasUsedFree = Boolean(
+    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1) ||
+    (user?.id && localStorage.getItem(`patternflow_free_used_${user.id}`) === '1')
+  );
+
+  const canAnalyze = isAdmin || isPro === true || !hasUsedFree;
 
   useEffect(() => {
     const checkPro = async () => {
+      if (isAdmin) {
+        setIsPro(true);
+        return;
+      }
       try {
         const token = await getToken();
         if (!token) return;
@@ -99,7 +124,7 @@ export default function UploadPage() {
       }
     };
     checkPro();
-  }, [getToken]);
+  }, [getToken, isAdmin]);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const navigate = useNavigate();
@@ -191,8 +216,8 @@ export default function UploadPage() {
   const handleAnalyze = async (fileToAnalyze = file, previewUrl = preview) => {
     if (!fileToAnalyze) return;
     
-    // Check Pro status
-    if (isPro === false) {
+    // Check if user has permission (Admin, Pro, or 1 free analysis credit remaining)
+    if (!canAnalyze) {
       setShowUpgradeModal(true);
       return;
     }
@@ -223,6 +248,26 @@ export default function UploadPage() {
         throw new Error(data.error || 'The AI failed to analyze this chart properly. Please try again.');
       }
       
+      // If user is consuming their 1 free analysis credit, record it
+      if (!isAdmin && isPro !== true) {
+        if (user?.id) {
+          localStorage.setItem(`patternflow_free_used_${user.id}`, '1');
+        }
+        try {
+          if (user?.update) {
+            await user.update({
+              unsafeMetadata: {
+                ...(user.unsafeMetadata || {}),
+                freeAnalysesUsed: 1,
+                lastFreeAnalysisAt: new Date().toISOString()
+              }
+            });
+          }
+        } catch (metaErr) {
+          console.warn('Could not update Clerk metadata:', metaErr);
+        }
+      }
+
       navigate('/analysis', { state: { result: data, image: previewUrl, analysisLength: analysisLength } });
     } catch (err) {
       console.error(err);
@@ -260,15 +305,54 @@ export default function UploadPage() {
       )}
       
       {/* Top Header Row (Matches screenshot exactly) */}
-      <div className="order-1 flex flex-col md:flex-row md:items-start justify-between mb-8 gap-4">
+      <div className="order-1 flex flex-col md:flex-row md:items-start justify-between mb-6 gap-4">
         <div>
           <h1 className="text-2xl sm:text-[32px] font-bold text-white tracking-tight mb-2 heading-font">
             <span className="text-[#00d060]">AI-Powered</span> Chart Analysis
           </h1>
           <p className="text-[#888888] font-medium">Upload a chart or paste a link and get instant AI-powered insights</p>
         </div>
-        
       </div>
+
+      {/* Free Trial Banner / Status */}
+      {!isAdmin && isPro !== true && (
+        <div className="order-2 mb-6">
+          {!hasUsedFree ? (
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00d060]/10 via-[#00d060]/5 to-transparent border border-[#00d060]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-[0_0_30px_rgba(0,208,96,0.06)]">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-[#00d060]/20 text-[#00d060] flex items-center justify-center flex-shrink-0">
+                  <Sparkles size={18} />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-white block">1 Free Analysis Available</span>
+                  <span className="text-xs text-[#888888]">Upload your first chart to get a full institutional breakdown. After this, upgrade to Pro for unlimited analyses.</span>
+                </div>
+              </div>
+              <span className="text-xs font-mono font-extrabold px-3 py-1 rounded-full bg-[#00d060] text-black">
+                1 FREE CREDIT
+              </span>
+            </div>
+          ) : (
+            <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center flex-shrink-0">
+                  <AlertCircle size={18} />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-white block">Free Analysis Used</span>
+                  <span className="text-xs text-[#888888]">You've used your 1 free chart analysis. Upgrade to Pro to continue scanning charts.</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => navigate('/billing')}
+                className="text-xs font-bold px-4 py-2 rounded-xl bg-[#00d060] text-black hover:bg-[#00f575] transition-colors shadow-sm"
+              >
+                Upgrade to Pro &rarr;
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Action Buttons Row */}
       <div className={`order-3 lg:order-2 ${file ? 'hidden lg:flex' : 'flex'} flex-col sm:flex-row gap-4 mb-8`}>
@@ -589,7 +673,7 @@ export default function UploadPage() {
             
             <h2 className="text-2xl font-extrabold text-white mb-2">Upgrade to Pro</h2>
             <p className="text-[#888888] text-sm mb-6 leading-relaxed">
-              You need a Pro subscription to generate AI chart analyses. Upgrade now to unlock advanced pattern recognition and unlimited insights.
+              You've used your 1 free chart analysis. Upgrade to Pro now to unlock unlimited institutional chart breakdowns, Smart Money Concepts, and real-time AI chart chat.
             </p>
             
             <div className="flex gap-3">
