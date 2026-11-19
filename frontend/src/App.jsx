@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import LandingPage from './pages/LandingPage';
+import LandingPageV2 from './pages/LandingPageV2';
 import UploadPage from './pages/UploadPage';
 import AnalysisPage from './pages/AnalysisPage';
 import HistoryPage from './pages/HistoryPage';
@@ -22,6 +23,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/preview-v2" element={<LandingPageV2 />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route path="/checkout" element={<MockCheckoutPage />} />
         <Route path="/terms" element={<TermsPage />} />
