@@ -113,9 +113,14 @@ export default function LandingPage() {
         </p>
         
         <div className="flex flex-col items-center gap-6">
-          <Link to="/onboarding" className="bg-white text-black hover:bg-gray-200 border border-white px-6 py-3 text-[15px] sm:px-8 sm:py-3.5 sm:text-base md:px-10 md:py-4 md:text-lg rounded-full font-extrabold transition flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(255,255,255,0.25)]">
-            Get Started <ArrowRight className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 ml-0.5 sm:ml-1" />
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            <Link to="/onboarding" className="w-full sm:w-auto bg-white text-black hover:bg-gray-200 border border-white px-6 py-3 text-[15px] sm:px-8 sm:py-3.5 sm:text-base md:px-10 md:py-4 md:text-lg rounded-full font-extrabold transition flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(255,255,255,0.25)]">
+              Get Started <ArrowRight className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 ml-0.5 sm:ml-1" />
+            </Link>
+            <a href="#demo" className="w-full sm:w-auto bg-[#161B22]/70 hover:bg-[#21262d] text-gray-200 hover:text-white border border-[#30363D] hover:border-[#00d060]/50 px-6 py-3 text-[15px] sm:px-7 sm:py-3.5 sm:text-base md:px-8 md:py-4 md:text-lg rounded-full font-bold transition flex items-center justify-center gap-2 backdrop-blur-md shadow-sm hover:-translate-y-0.5">
+              View Demo Sample ↓
+            </a>
+          </div>
           
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
             <div className="flex -space-x-3">
@@ -140,7 +145,7 @@ export default function LandingPage() {
       </section>
 
       {/* PRODUCT SCREENSHOT */}
-      <section className="py-16 px-5 sm:px-8 relative z-20 w-full">
+      <section id="demo" className="py-16 px-5 sm:px-8 relative z-20 w-full scroll-mt-6">
         <div className="max-w-[1400px] lg:max-w-[1000px] xl:max-w-[1150px] 2xl:max-w-[1300px] mx-auto w-full">
           <div className="bg-[#161B22] border border-[#30363D] rounded-2xl shadow-[0_0_50px_rgba(0,208,96,0.05)] overflow-hidden">
             <div className="bg-[#0D1117] border-b border-[#30363D] px-4 py-3 flex items-center gap-2">
