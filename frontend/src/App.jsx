@@ -41,10 +41,12 @@ function App() {
             </SignedOut>
           </>
         }>
+          {/* App Routes accessible to signed-in users (Free users get 1 analysis, Pro users get unlimited) */}
+          <Route path="/upload" element={<UploadPage />} />
+          <Route path="/analysis/:id?" element={<AnalysisPage />} />
+          
           {/* Pro-Only Routes */}
           <Route element={<ProProtectedRoute />}>
-            <Route path="/upload" element={<UploadPage />} />
-            <Route path="/analysis/:id?" element={<AnalysisPage />} />
             <Route path="/history" element={<HistoryPage />} />
             
             {/* Placeholder Routes */}

@@ -65,16 +65,14 @@ export default function DashboardLayout() {
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  // Check if 1 free analysis has already been used
+  // Check if 1 free analysis has already been used and completed
   const hasUsedFree = Boolean(
-    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1) ||
-    (user?.id && localStorage.getItem(`patternflow_free_used_${user.id}`) === '1')
+    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1 && user?.unsafeMetadata?.analysisCompleted === true) ||
+    (user?.id && localStorage.getItem(`patternflow_free_completed_${user.id}`) === '1')
   );
 
-  const canAccessUpload = isProUser || !hasUsedFree;
-
   const navItems = [
-    { name: 'Analyze Chart', icon: LineChart, path: '/upload', proOnly: true },
+    { name: 'Analyze Chart', icon: LineChart, path: '/upload' },
   ];
 
   const bottomNavItems = [
@@ -99,24 +97,18 @@ export default function DashboardLayout() {
       );
     }
 
-    // If item is proOnly and user is not Pro AND has already used their free trial
-    if (item.proOnly && !canAccessUpload && !isLoadingPro) {
-      return (
-        <div key={item.name} onClick={() => setShowUpgradeModal(true)} className={`${classes} cursor-pointer`}>
-          <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
-          <span className="flex-1">{item.name}</span>
-          <Crown size={14} className="text-[#00d060]" />
-        </div>
-      );
-    }
-
     return (
       <Link key={item.name} to={item.path} className={classes}>
         <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
         <span className="flex-1">{item.name}</span>
         {!isProUser && !hasUsedFree && item.path === '/upload' && (
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00d060]/20 text-[#00d060] border border-[#00d060]/30">
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00d060]/20 text-[#00d060] border border-[#00d060]/30 animate-pulse">
             1 Free
+          </span>
+        )}
+        {!isProUser && hasUsedFree && item.path === '/upload' && (
+          <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-[#222222] text-[#888888] border border-[#333333]">
+            Used
           </span>
         )}
       </Link>

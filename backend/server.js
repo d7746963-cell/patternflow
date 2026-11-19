@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const { ClerkExpressRequireAuth } = require('@clerk/clerk-sdk-node');
+const { ClerkExpressRequireAuth, ClerkExpressWithAuth } = require('@clerk/clerk-sdk-node');
 dotenv.config();
 
 const analyzeRoute = require('./routes/analyze');
@@ -28,7 +28,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Routes
 // Apply Clerk middleware to protect these routes
-app.use('/api/analyze', ClerkExpressRequireAuth({ requireAuth: false }), analyzeRoute);
+app.use('/api/analyze', ClerkExpressWithAuth(), analyzeRoute);
 app.use('/api/chat', ClerkExpressRequireAuth(), chatRouter);
 app.use('/api/checkout', ClerkExpressRequireAuth(), checkoutRouter);
 app.use('/api/news', ClerkExpressRequireAuth(), newsRouter);

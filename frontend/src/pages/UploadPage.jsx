@@ -99,8 +99,8 @@ export default function UploadPage() {
   );
 
   const hasUsedFree = Boolean(
-    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1) ||
-    (user?.id && localStorage.getItem(`patternflow_free_used_${user.id}`) === '1')
+    (user?.unsafeMetadata && Number(user.unsafeMetadata.freeAnalysesUsed) >= 1 && user?.unsafeMetadata?.analysisCompleted === true) ||
+    (user?.id && localStorage.getItem(`patternflow_free_completed_${user.id}`) === '1')
   );
 
   const canAnalyze = isAdmin || isPro === true || !hasUsedFree;
@@ -248,27 +248,15 @@ export default function UploadPage() {
         throw new Error(data.error || 'The AI failed to analyze this chart properly. Please try again.');
       }
       
-      // If user is consuming their 1 free analysis credit, record it
-      if (!isAdmin && isPro !== true) {
-        if (user?.id) {
-          localStorage.setItem(`patternflow_free_used_${user.id}`, '1');
-        }
-        try {
-          if (user?.update) {
-            await user.update({
-              unsafeMetadata: {
-                ...(user.unsafeMetadata || {}),
-                freeAnalysesUsed: 1,
-                lastFreeAnalysisAt: new Date().toISOString()
-              }
-            });
-          }
-        } catch (metaErr) {
-          console.warn('Could not update Clerk metadata:', metaErr);
-        }
-      }
-
-      navigate('/analysis', { state: { result: data, image: previewUrl, analysisLength: analysisLength } });
+      // Safely navigate to /analysis to display the result without interruption
+      navigate('/analysis', { 
+        state: { 
+          result: data, 
+          image: previewUrl, 
+          analysisLength: analysisLength,
+          isFreeTrialConsumption: (!isAdmin && isPro !== true)
+        } 
+      });
     } catch (err) {
       console.error(err);
       alert(`Error: ${err.message}`);

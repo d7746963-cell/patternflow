@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, Link, Navigate, useParams, useOutletContext } from 'react-router-dom';
 import { ArrowLeft, Share, BookmarkPlus, Activity, TrendingUp, TrendingDown, Crosshair, BarChart3, Eye, Info, Building2, AlertTriangle, AlertCircle, FileText, CheckCircle2, ThumbsUp, ThumbsDown, Target, Clock, ShieldAlert, Plus, Mic, Send, Zap, X, Sparkles, Triangle , Maximize, Minimize } from 'lucide-react';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -9,6 +9,7 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 export default function AnalysisPage() {
   const { id } = useParams();
   const { getToken } = useAuth();
+  const { user } = useUser();
   const location = useLocation();
   
   // Try to load from state first, then fallback to session storage
@@ -28,6 +29,25 @@ export default function AnalysisPage() {
       sessionStorage.setItem('lastAnalysisLength', location.state.analysisLength);
     }
   }, [location.state]);
+
+  // If this analysis was generated using the user's 1 free credit, record it safely now that it is rendered
+  React.useEffect(() => {
+    if (location.state?.isFreeTrialConsumption) {
+      if (user?.id) {
+        localStorage.setItem(`patternflow_free_completed_${user.id}`, '1');
+      }
+      if (user?.update) {
+        user.update({
+          unsafeMetadata: {
+            ...(user.unsafeMetadata || {}),
+            freeAnalysesUsed: 1,
+            analysisCompleted: true,
+            completedAt: new Date().toISOString()
+          }
+        }).catch(err => console.warn('Non-blocking metadata update warning:', err));
+      }
+    }
+  }, [location.state?.isFreeTrialConsumption, user]);
 
   const context = useOutletContext();
   const [localIsFullSize, setLocalIsFullSize] = React.useState(false);
