@@ -15,9 +15,27 @@
     --accent-light: rgba(0, 208, 96, 0.15);
     --border-color: rgba(255, 255, 255, 0.08);
     
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-heading: 'Outfit', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    /* Apple Design Easing & Spring Tokens */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+    
+    --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', system-ui, sans-serif;
+    --font-heading: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Outfit', system-ui, sans-serif;
+    --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  /* Apple Mobile Native Baseline */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+  button, [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   body {
@@ -258,3 +276,52 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555555;
 }
+
+/* Apple Design Material & Animation Utilities */
+.apple-glass {
+  background: rgba(18, 18, 18, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.apple-card {
+  background: rgba(22, 22, 24, 0.6);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.apple-btn {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 140ms var(--ease-out), opacity 140ms var(--ease-out), background-color 140ms var(--ease-out);
+}
+.apple-btn:active {
+  transform: scale(0.97) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apple-btn:hover {
+    transform: translateY(-1px);
+  }
+  .apple-btn:active {
+    transform: scale(0.97) !important;
+  }
+}
+
+/* Apple Reduced Motion Accessibility Standard */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee, .animate-marquee-reverse, .animate-float {
+    animation: none !important;
+  }
+}
+
