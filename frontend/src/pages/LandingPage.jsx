@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, Check, CheckCircle2, ArrowRight, ChevronDown, LineChart, TrendingDown, TrendingUp, Activity, BarChart2, Target, Zap, BookOpen, ChevronRight, Sparkles, Smartphone, Camera, Send, AlertCircle, Info, ArrowLeft, Upload, Maximize, ThumbsDown, Search, Globe, User } from "lucide-react";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { FREE_BETA_MODE } from "../config/features";
 
 const FAQItem = ({ q, a }) => {
   const [open, setOpen] = useState(false);
@@ -1084,8 +1085,15 @@ export default function LandingPage() {
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-14 flex flex-col items-center">
+            {FREE_BETA_MODE && (
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00d060]/15 border border-[#00d060]/30 text-[#00d060] text-xs font-mono font-bold uppercase tracking-wider mb-4 animate-pulse">
+                <Sparkles size={14} /> Public Beta — 100% Free Access
+              </div>
+            )}
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-100 tracking-tight mb-4">Simple, transparent pricing</h2>
-            <p className="text-[#888888] text-lg">Unlock the full power of AI-driven chart analysis.</p>
+            <p className="text-[#888888] text-lg">
+              {FREE_BETA_MODE ? 'Currently free for all early users. Paid subscriptions will activate soon.' : 'Unlock the full power of AI-driven chart analysis.'}
+            </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
@@ -1100,8 +1108,8 @@ export default function LandingPage() {
                 <span className="text-[#888888] text-sm font-semibold mb-1">/ month</span>
               </div>
               
-              <Link to="/onboarding" className="w-full block text-center border border-[#333333] hover:border-[#444444] hover:bg-[#1a1a1a] text-gray-100 font-bold py-4 rounded-xl text-sm transition-all mb-10">
-                Get Monthly
+              <Link to="/onboarding" className="w-full block text-center border border-[#333333] hover:border-[#444444] hover:bg-[#1a1a1a] text-gray-100 font-bold py-4 rounded-xl text-sm transition-all mb-10 active:scale-[0.98]">
+                {FREE_BETA_MODE ? 'Start Analyzing Free' : 'Get Monthly'}
               </Link>
               
               <ul className="space-y-4">
@@ -1126,8 +1134,8 @@ export default function LandingPage() {
               </div>
               <p className="text-[#00d060] text-sm font-bold mb-6">Billed $144 yearly</p>
               
-              <Link to="/onboarding" className="w-full block text-center bg-[#00d060] hover:bg-[#00e56a] text-black font-bold py-4 rounded-xl text-sm transition-all mb-10 shadow-[0_0_20px_rgba(0,208,96,0.2)]">
-                Get Yearly
+              <Link to="/onboarding" className="w-full block text-center bg-[#00d060] hover:bg-[#00e56a] text-black font-bold py-4 rounded-xl text-sm transition-all mb-10 shadow-[0_0_20px_rgba(0,208,96,0.2)] active:scale-[0.98]">
+                {FREE_BETA_MODE ? 'Start Analyzing Free' : 'Get Yearly'}
               </Link>
               
               <ul className="space-y-4">

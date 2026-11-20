@@ -7,6 +7,7 @@ import {
   Layers, Lock, Cpu, Clock, Terminal, Check, ExternalLink, ArrowUpRight
 } from "lucide-react";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { FREE_BETA_MODE } from "../config/features";
 
 export default function LandingPageV2() {
   const [sampleView, setSampleView] = useState("technical");
@@ -796,13 +797,19 @@ export default function LandingPageV2() {
       <section id="pricing" className="py-24 px-5 md:px-8 max-w-[1240px] mx-auto relative z-20 scroll-mt-24">
         
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#0071e3] mb-2">Transparent Plans</p>
+          {FREE_BETA_MODE ? (
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00d060]/15 border border-[#00d060]/30 text-[#00d060] text-xs font-mono font-bold uppercase tracking-wider mb-4 animate-pulse">
+              <Sparkles size={14} /> Public Beta — 100% Free Access
+            </div>
+          ) : (
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#0071e3] mb-2">Transparent Plans</p>
+          )}
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] mb-4">
             <span className="text-white">Invest in </span>
             <span className="text-[#86868b]">disciplined execution.</span>
           </h2>
           <p className="text-base md:text-lg text-[#86868b]">
-            One avoided emotional mistake pays for years of PatternFlow.
+            {FREE_BETA_MODE ? 'All institutional features are 100% free during early access beta.' : 'One avoided emotional mistake pays for years of PatternFlow.'}
           </p>
         </div>
 
@@ -843,7 +850,7 @@ export default function LandingPageV2() {
               to="/onboarding" 
               className="apple-btn w-full text-center py-3.5 rounded-full font-semibold text-sm bg-white/[0.08] hover:bg-white/[0.14] text-white border border-white/[0.1]"
             >
-              Start Monthly Plan
+              {FREE_BETA_MODE ? 'Start Free in Beta' : 'Start Monthly Plan'}
             </Link>
           </div>
 
@@ -887,16 +894,26 @@ export default function LandingPageV2() {
               to="/onboarding" 
               className="apple-btn w-full text-center py-3.5 rounded-full font-semibold text-sm bg-white hover:bg-[#e8e8ed] text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
-              Claim 60% Discount Now
+              {FREE_BETA_MODE ? 'Start Free in Beta' : 'Claim 60% Discount Now'}
             </Link>
           </div>
 
         </div>
 
-        {/* Free Trial Banner */}
+        {/* Free Trial / Public Beta Banner */}
         <div className="mt-12 text-center text-xs sm:text-sm text-[#86868b] rounded-full border border-white/[0.08] bg-[#161618]/60 backdrop-blur-xl py-3 px-6 max-w-lg mx-auto flex items-center justify-center gap-2">
           <Sparkles size={16} className="text-[#00d060]" />
-          <span>New user? <strong className="text-white">Your first chart analysis is 100% free</strong> without entering a credit card.</span>
+          <span>
+            {FREE_BETA_MODE ? (
+              <>
+                <strong className="text-white">Public Beta: Unlimited analyses are 100% free</strong> with no card required.
+              </>
+            ) : (
+              <>
+                New user? <strong className="text-white">Your first chart analysis is 100% free</strong> without entering a credit card.
+              </>
+            )}
+          </span>
         </div>
 
       </section>

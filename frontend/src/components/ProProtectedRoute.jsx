@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import { useUser } from '@clerk/clerk-react';
 import { Loader2 } from 'lucide-react';
+import { FREE_BETA_MODE } from '../config/features';
 
 // Hardcoded admin emails — free lifetime access, works across all Clerk instances
 const ADMIN_EMAILS = [
@@ -28,7 +29,7 @@ export default function ProProtectedRoute({ children }) {
         allEmails.includes(adminEmail) || primaryEmail === adminEmail
       );
 
-      if (isAdmin) {
+      if (FREE_BETA_MODE || isAdmin) {
         setIsPro(true);
         return;
       }

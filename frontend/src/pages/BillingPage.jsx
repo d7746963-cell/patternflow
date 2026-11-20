@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Check, Crown, Shield, Loader2, Sparkles, Zap, Users, Plus, Minus } from 'lucide-react';
 import { useAuth } from '@clerk/clerk-react';
 import { useSearchParams } from 'react-router-dom';
+import { FREE_BETA_MODE } from '../config/features';
 
 export default function BillingPage() {
   const { getToken } = useAuth();
@@ -52,6 +53,10 @@ export default function BillingPage() {
   }, [searchParams]);
 
   const handleSubscribe = (planId) => {
+    if (FREE_BETA_MODE) {
+      window.location.href = '/upload';
+      return;
+    }
     setLoadingPlan(planId);
     
     // Redirect to Kelviq Checkout
@@ -99,7 +104,27 @@ export default function BillingPage() {
         </div>
       )}
 
-      {searchParams.get('reason') === 'limit_reached' && (
+      {FREE_BETA_MODE && (
+        <div className="mb-8 p-5 rounded-2xl bg-[#00d060]/10 border border-[#00d060]/30 text-center max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_0_30px_rgba(0,208,96,0.06)] backdrop-blur-md">
+          <div className="flex items-center gap-3 text-left">
+            <div className="w-9 h-9 rounded-xl bg-[#00d060]/20 text-[#00d060] flex items-center justify-center flex-shrink-0">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <span className="text-sm font-bold text-white block">PatternFlow is Currently in Free Public Beta</span>
+              <span className="text-xs text-[#888888]">All institutional AI features are 100% free with unlimited scans. Paid plans will launch soon.</span>
+            </div>
+          </div>
+          <a 
+            href="/upload" 
+            className="text-xs font-bold px-5 py-2.5 rounded-xl bg-[#00d060] text-black hover:bg-[#00f575] transition-all whitespace-nowrap shadow-sm"
+          >
+            Start Analyzing Free &rarr;
+          </a>
+        </div>
+      )}
+
+      {!FREE_BETA_MODE && searchParams.get('reason') === 'limit_reached' && (
         <div className="mb-8 p-4 rounded-2xl bg-[#00d060]/10 border border-[#00d060]/30 text-center max-w-xl mx-auto flex items-center justify-center gap-3">
           <Sparkles size={20} className="text-[#00d060] flex-shrink-0" />
           <span className="text-sm font-semibold text-white">
@@ -195,10 +220,10 @@ export default function BillingPage() {
               </div>
               <button 
                 onClick={() => handleSubscribe('monthly')}
-                disabled={loadingPlan === 'monthly'}
-                className="w-full bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold py-3.5 px-4 rounded-xl border border-[#333] transition-all mb-8 flex justify-center items-center gap-2 relative z-10"
+                disabled={!FREE_BETA_MODE && loadingPlan === 'monthly'}
+                className="w-full bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold py-3.5 px-4 rounded-xl border border-[#333] transition-all mb-8 flex justify-center items-center gap-2 relative z-10 active:scale-[0.98]"
               >
-                {loadingPlan === 'monthly' ? <Loader2 size={18} className="animate-spin" /> : 'Get Monthly'}
+                {FREE_BETA_MODE ? 'Free During Beta →' : (loadingPlan === 'monthly' ? <Loader2 size={18} className="animate-spin" /> : 'Get Monthly')}
               </button>
               <div className="space-y-4 flex-1 relative">
                 <FeatureItem text="Unlimited AI chart analyses" />
@@ -236,10 +261,10 @@ export default function BillingPage() {
               
               <button 
                 onClick={() => handleSubscribe('yearly')}
-                disabled={loadingPlan === 'yearly'}
-                className="w-full bg-[#00d060] hover:bg-[#00e56a] text-black font-bold py-3.5 px-4 rounded-xl shadow-[0_0_20px_rgba(0,208,96,0.2)] hover:shadow-[0_0_30px_rgba(0,208,96,0.4)] transition-all mb-8 flex justify-center items-center gap-2 relative z-10"
+                disabled={!FREE_BETA_MODE && loadingPlan === 'yearly'}
+                className="w-full bg-[#00d060] hover:bg-[#00e56a] text-black font-bold py-3.5 px-4 rounded-xl shadow-[0_0_20px_rgba(0,208,96,0.2)] hover:shadow-[0_0_30px_rgba(0,208,96,0.4)] transition-all mb-8 flex justify-center items-center gap-2 relative z-10 active:scale-[0.98]"
               >
-                {loadingPlan === 'yearly' ? <Loader2 size={18} className="animate-spin text-black" /> : 'Get Yearly'}
+                {FREE_BETA_MODE ? 'Free During Beta →' : (loadingPlan === 'yearly' ? <Loader2 size={18} className="animate-spin text-black" /> : 'Get Yearly')}
               </button>
               
               <div className="space-y-4 flex-1 relative z-10">

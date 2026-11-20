@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { CloudUpload, X, MoreHorizontal, Sun, ChevronDown, Activity, Shield, Crosshair, Triangle, FileText, TrendingUp, TrendingDown, Minus, Sparkles, Camera, LineChart, ImagePlus, AlertCircle } from 'lucide-react';
 import { useAuth, useUser } from '@clerk/clerk-react';
+import { FREE_BETA_MODE } from '../config/features';
 
 // Hardcoded admin emails — free lifetime access
 const ADMIN_EMAILS = [
@@ -103,7 +104,7 @@ export default function UploadPage() {
     (user?.id && localStorage.getItem(`patternflow_free_completed_${user.id}`) === '1')
   );
 
-  const canAnalyze = isAdmin || isPro === true || !hasUsedFree;
+  const canAnalyze = FREE_BETA_MODE || isAdmin || isPro === true || !hasUsedFree;
 
   useEffect(() => {
     const checkPro = async () => {
@@ -254,7 +255,7 @@ export default function UploadPage() {
           result: data, 
           image: previewUrl, 
           analysisLength: analysisLength,
-          isFreeTrialConsumption: (!isAdmin && isPro !== true)
+          isFreeTrialConsumption: (!FREE_BETA_MODE && !isAdmin && isPro !== true)
         } 
       });
     } catch (err) {
@@ -302,10 +303,25 @@ export default function UploadPage() {
         </div>
       </div>
 
-      {/* Free Trial Banner / Status */}
+      {/* Free Trial / Public Beta Banner */}
       {!isAdmin && isPro !== true && (
         <div className="order-2 mb-6">
-          {!hasUsedFree ? (
+          {FREE_BETA_MODE ? (
+            <div className="p-4 rounded-2xl bg-[#00d060]/10 border border-[#00d060]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-[0_0_30px_rgba(0,208,96,0.06)] backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-[#00d060]/20 text-[#00d060] flex items-center justify-center flex-shrink-0">
+                  <Sparkles size={18} />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-white block">Public Beta — 100% Free Access</span>
+                  <span className="text-xs text-[#888888]">Analyze unlimited charts with institutional AI & SMC insights during our early access beta.</span>
+                </div>
+              </div>
+              <span className="text-xs font-mono font-extrabold px-3 py-1 rounded-full bg-[#00d060] text-black tracking-wide">
+                FREE UNLIMITED
+              </span>
+            </div>
+          ) : !hasUsedFree ? (
             <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00d060]/10 via-[#00d060]/5 to-transparent border border-[#00d060]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-[0_0_30px_rgba(0,208,96,0.06)]">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-[#00d060]/20 text-[#00d060] flex items-center justify-center flex-shrink-0">

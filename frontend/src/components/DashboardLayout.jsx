@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { LineChart, LayoutDashboard, History, Star, Bell, Settings, CreditCard, HelpCircle, Menu, X, Crown, Sparkles } from 'lucide-react';
 import { UserButton, useAuth, useUser } from '@clerk/clerk-react';
+import { FREE_BETA_MODE } from '../config/features';
 
 // Hardcoded admin emails — free lifetime access
 const ADMIN_EMAILS = [
@@ -35,7 +36,7 @@ export default function DashboardLayout() {
         allEmails.includes(adminEmail) || primaryEmail === adminEmail
       );
 
-      if (isAdmin) {
+      if (FREE_BETA_MODE || isAdmin) {
         setIsProUser(true);
         setIsLoadingPro(false);
         return;
@@ -101,12 +102,17 @@ export default function DashboardLayout() {
       <Link key={item.name} to={item.path} className={classes}>
         <item.icon size={20} className={active ? 'text-white' : 'text-[#888888]'} />
         <span className="flex-1">{item.name}</span>
-        {!isProUser && !hasUsedFree && item.path === '/upload' && (
+        {FREE_BETA_MODE && item.path === '/upload' && (
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00d060]/20 text-[#00d060] border border-[#00d060]/30 animate-pulse">
+            Beta Free
+          </span>
+        )}
+        {!FREE_BETA_MODE && !isProUser && !hasUsedFree && item.path === '/upload' && (
           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00d060]/20 text-[#00d060] border border-[#00d060]/30 animate-pulse">
             1 Free
           </span>
         )}
-        {!isProUser && hasUsedFree && item.path === '/upload' && (
+        {!FREE_BETA_MODE && !isProUser && hasUsedFree && item.path === '/upload' && (
           <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-[#222222] text-[#888888] border border-[#333333]">
             Used
           </span>
@@ -152,8 +158,24 @@ export default function DashboardLayout() {
           
           {/* Bottom Section */}
           <div className="mt-auto flex flex-col">
-            {/* Upgrade to Pro Card */}
-            {!isProUser && !isLoadingPro && (
+            {/* Public Beta Status or Upgrade to Pro Card */}
+            {FREE_BETA_MODE ? (
+              <div className="px-6 pb-6">
+                <div className="bg-[#111111]/80 border border-[#00d060]/30 rounded-2xl p-4 relative overflow-hidden backdrop-blur-md">
+                  <div className="absolute top-0 right-0 p-8 bg-[#00d060]/5 rounded-bl-full -z-10"></div>
+                  <div className="flex items-center gap-2 text-white font-bold text-sm mb-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#00d060] animate-pulse"></span>
+                    Public Beta Free
+                  </div>
+                  <p className="text-xs text-[#888888] leading-relaxed mb-3">
+                    Enjoy unlimited institutional AI chart analyses during early access.
+                  </p>
+                  <div className="text-[11px] font-mono font-bold text-[#00d060] bg-[#00d060]/10 border border-[#00d060]/20 rounded-lg px-2.5 py-1 text-center">
+                    UNLIMITED ACCESS
+                  </div>
+                </div>
+              </div>
+            ) : (!isProUser && !isLoadingPro && (
               <div className="px-6 pb-6">
                   <div className="bg-[#111111] border border-[#222222] rounded-2xl p-5 relative overflow-hidden group hover:border-white/20 transition-colors">
                     <div className="absolute top-0 right-0 p-8 bg-white/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
@@ -167,7 +189,7 @@ export default function DashboardLayout() {
                     </Link>
                   </div>
               </div>
-            )}
+            ))}
             
             {/* User Profile */}
             <div className="border-t border-[#222222] p-6 flex items-center gap-3">
