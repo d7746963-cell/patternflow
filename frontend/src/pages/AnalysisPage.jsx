@@ -1053,17 +1053,6 @@ export default function AnalysisPage() {
         </div>
       </div>
 
-      {/* Image Quality Warning Banner */}
-      {aiData.image_quality_note && aiData.image_quality_note !== 'null' && (
-        <div className="mb-6 mx-4 sm:mx-0 bg-orange-900/20 border border-orange-500/30 rounded-xl p-4 flex items-start gap-3 shadow-sm">
-          <AlertTriangle className="text-orange-500 flex-shrink-0 mt-0.5" size={20} />
-          <div>
-            <h4 className="text-orange-800 font-bold text-sm">Image Quality Warning</h4>
-            <p className="text-orange-700 text-sm mt-1">{aiData.image_quality_note}</p>
-          </div>
-        </div>
-      )}
-
       {/* Company Header */}
       {companyInfo && (
         <div className="mb-6 flex flex-col items-start">

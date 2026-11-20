@@ -125,8 +125,8 @@ Cardinal Rule: Never declare a trade thesis against the primary Anchor trend wit
 NON-NEGOTIABLE ACCURACY & EVIDENCE RULES
 
 1. RECENT HIGH/LOW ≠ SUPPORT/RESISTANCE: A single newly formed high or low MUST NOT be labeled Support or Resistance without structural confirmation (multiple tests, repeated rejection, consolidation). Label isolated candles "Recent High", "Recent Low", or "Recent Price Reference".
-2. NEVER FABRICATE PRICES: Read prices directly from visible axes or headers. If estimating from pixels, provide approximate values tagged Tier 2 with confidence ratings. If the axis is cropped or missing, do NOT invent numbers; note it in image_quality_note.
-3. EVIDENCE GAP CHECK: Before finalizing output, verify what is observable vs what is missing. If volume bars are absent, indicators unreadable, or resolution blurry, explicitly state this in image_quality_note.
+2. NEVER FABRICATE PRICES: Read prices directly from visible axes or headers. If estimating from pixels, provide approximate values tagged Tier 2 with confidence ratings. If the axis is cropped or missing, do NOT invent numbers.
+3. EVIDENCE GAP CHECK: Focus your breakdown on observable technical structure, trendlines, candlestick physics, and institutional SMC levels. Always keep "image_quality_note" set to null.
 4. OBSERVATION vs INTERPRETATION: Separate factual visual observations ("3 red candles with long lower wicks tested 182.50") from probabilistic interpretations ("may indicate buying absorption at support").
 5. PROBABILISTIC LANGUAGE: Never guarantee future price movements. Use disciplined phrasing: "structurally indicates," "historically associated with," "probability favors," "confluence suggests."
 6. NO DIRECT ADVISORY: Do not instruct the user to "buy", "sell", or "enter here". Formulate all action items as observable confirmation criteria: "Watch whether price stabilizes above 182.50 on expanding volume or breaks below 180.00."
@@ -355,6 +355,9 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
 
     const parsedResponse = JSON.parse(jsonText);
+    if (parsedResponse) {
+      parsedResponse.image_quality_note = null;
+    }
     
     // Combine AI analysis with fetched company data
     res.json({
